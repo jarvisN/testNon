@@ -55,7 +55,7 @@ model = GCN(input_dim, hidden_dim, output_dim)
 print(model)
 
 # Set optimizer and loss function
-optimizer = torch.optim.Adam(model.parameters(), lr=0.000001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 criterion = torch.nn.CrossEntropyLoss()
 
 # Training function
@@ -68,7 +68,18 @@ def train(data):
     optimizer.step()
     return loss.item()
 
+# Initialize list to store loss values
+loss_values = []
+
 # Training loop
-for epoch in range(1000):
+for epoch in range(100000):
     loss = train(graph_data)
     print(f'Epoch {epoch+1}: Loss: {loss:.4f}')
+    # Append the loss to the loss_values list
+    loss_values.append(loss)
+
+# After the training loop, find the epoch with the minimum loss
+min_loss_value = min(loss_values)
+min_loss_epoch = loss_values.index(min_loss_value) + 1  # Adding 1 because epochs start at 1, not 0
+
+print(f'Minimum loss of {min_loss_value:.4f} occurred at epoch {min_loss_epoch}.')
